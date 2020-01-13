@@ -19,18 +19,24 @@ public class QuantityMeasurementServiceImp implements  QuantityMeasurementServic
         if (!meas1.getUnit().getClass().equals(meas2.getUnit().getClass())) {
             throw new QuantityMeasurementException("Class Not Equal", QuantityMeasurementException.ExceptionType.CLASS_NOT_EQUAL);
         }
-        double v = meas1.getValue() * meas1.getUnit().conversion();
-        double w = meas2.getValue() * meas2.getUnit().conversion();
-        return Double.compare(v, w)  == 0;
+        double unit1 = Math.round(meas1.getValue() * meas1.getUnit().conversion());
+        double unit2 = Math.round(meas2.getValue() * meas2.getUnit().conversion());
+        return Double.compare(unit1, unit2)  == 0;
     }
 
     @Override
-    public double additionOfUnits(InputMeasurementDto meas1, InputMeasurementDto meas2) {
+    public double additionOfUnits(InputMeasurementDto meas1, InputMeasurementDto meas2) throws QuantityMeasurementException {
+        if (!meas1.getUnit().getClass().equals(meas2.getUnit().getClass())) {
+            throw new QuantityMeasurementException("Class Not Equal", QuantityMeasurementException.ExceptionType.CLASS_NOT_EQUAL);
+        }
             return ((meas1.getValue() * meas1.getUnit().conversion()) + (meas2.getValue() * meas2.getUnit().conversion()));
         }
 
     @Override
-    public Boolean temperatureConversion(InputMeasurementDto meas1, InputMeasurementDto meas2) {
+    public Boolean temperatureConversion(InputMeasurementDto meas1, InputMeasurementDto meas2) throws QuantityMeasurementException {
+        if (!meas1.getUnit().getClass().equals(meas2.getUnit().getClass())) {
+            throw new QuantityMeasurementException("Class Not Equal", QuantityMeasurementException.ExceptionType.CLASS_NOT_EQUAL);
+        }
         if (meas1.getUnit().equals(TemperatureUnit.CELSIUS))
             return Double.compare(Math.round(meas1.getValue() - TemperatureUnit.FAHRENHEIT.measurementValue * (5 / 9)), Math.round(meas1.getValue())) == 0;
         return Double.compare(Math.round((meas2.getValue() * 9 / 5)+ 32) , Math.round(meas1.getValue())) == 0;
